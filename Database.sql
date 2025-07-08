@@ -102,3 +102,9 @@ CREATE TABLE user_purchases (
     purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     -- UNIQUE (user_id, item_id) -- Uncomment if a user can only purchase an item once
 );
+
+CREATE TABLE user_energy (
+    user_id INTEGER PRIMARY KEY REFERENCES users(user_id),
+    energy_remaining INTEGER DEFAULT 5 CHECK (energy_remaining >= 0),
+    last_recharged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

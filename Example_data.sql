@@ -110,3 +110,15 @@ INSERT INTO user_purchases (user_id, item_id) VALUES
 (7, 1),
 (8, 2),
 (9, 3);
+
+INSERT INTO user_energy (user_id, energy_remaining, last_recharged_at) VALUES
+(1, 3, CURRENT_TIMESTAMP - INTERVAL '2 hours'),
+(2, 5, CURRENT_TIMESTAMP - INTERVAL '10 minutes'),
+(3, 0, CURRENT_TIMESTAMP - INTERVAL '5 hours'),
+(4, 2, CURRENT_TIMESTAMP - INTERVAL '1 hour'),
+(5, 4, CURRENT_TIMESTAMP - INTERVAL '20 minutes'),
+(6, 5, CURRENT_TIMESTAMP - INTERVAL '15 minutes'),
+(7, 1, CURRENT_TIMESTAMP - INTERVAL '3 hours'),
+(8, 2, CURRENT_TIMESTAMP - INTERVAL '90 minutes'),
+(9, 5, CURRENT_TIMESTAMP - INTERVAL '5 minutes'),
+(10, 0, CURRENT_TIMESTAMP - INTERVAL '6 hours');
