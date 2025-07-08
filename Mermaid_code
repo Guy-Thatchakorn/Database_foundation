@@ -1,0 +1,91 @@
+erDiagram
+
+    USERS {
+        int user_id PK
+        varchar username
+        varchar email
+        text password_hash
+        timestamp signup_date
+        int xp
+        int streak
+    }
+
+    LANGUAGES {
+        int language_id PK
+        varchar name
+        varchar code
+    }
+
+    COURSES {
+        int course_id PK
+        int from_language_id FK
+        int to_language_id FK
+        varchar title
+    }
+
+    SKILLS {
+        int skill_id PK
+        int course_id FK
+        varchar name
+        int level_count
+        int skill_order
+    }
+
+    LESSONS {
+        int lesson_id PK
+        int skill_id FK
+        varchar title
+    }
+
+    EXERCISES {
+        int exercise_id PK
+        int lesson_id FK
+        varchar type
+        text question
+        text answer
+    }
+
+    USER_PROGRESS {
+        int user_id PK, FK
+        int skill_id PK, FK
+        int level
+        int strength
+        timestamp last_practiced
+    }
+
+    ACHIEVEMENTS {
+        int achievement_id PK
+        varchar name
+        text description
+    }
+
+    USER_ACHIEVEMENTS {
+        int user_id PK, FK
+        int achievement_id PK, FK
+        timestamp unlocked_at
+    }
+
+    USER_HEARTS {
+        int user_id PK, FK
+        int hearts_remaining
+        timestamp last_updated
+    }
+
+    LEADERBOARD {
+        int leaderboard_id PK
+        int user_id FK
+        date week_start
+        int xp
+        int rank
+    }
+
+    USERS ||--o{ USER_PROGRESS : tracks
+    SKILLS ||--o{ USER_PROGRESS : contains
+    LANGUAGES ||--o{ COURSES : includes
+    COURSES ||--o{ SKILLS : has
+    SKILLS ||--o{ LESSONS : has
+    LESSONS ||--o{ EXERCISES : has
+    USERS ||--o{ USER_ACHIEVEMENTS : earns
+    ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : includes
+    USERS ||--|| USER_HEARTS : has
+    USERS ||--o{ LEADERBOARD : ranks
