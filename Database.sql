@@ -12,18 +12,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---USER COURSES
-CREATE TABLE user_courses (
-    user_course_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    course_id INTEGER REFERENCES courses(course_id),
-    -- Status could be 'enrolled', 'completed', 'dropped'
-    enrollment_status VARCHAR(50) DEFAULT 'enrolled',
-    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (user_id, course_id)
-);
-
 -- LANGUAGES
 CREATE TABLE languages (
     language_id SERIAL PRIMARY KEY,
@@ -97,6 +85,18 @@ CREATE TABLE user_purchases (
     item_id INTEGER REFERENCES shop_items(item_id),
     purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     -- UNIQUE (user_id, item_id) -- Uncomment if a user can only purchase an item once
+);
+
+--USER COURSES
+CREATE TABLE user_courses (
+    user_course_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(user_id),
+    course_id INTEGER REFERENCES courses(course_id),
+    -- Status could be 'enrolled', 'completed', 'dropped'
+    enrollment_status VARCHAR(50) DEFAULT 'enrolled',
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, course_id)
 );
 
 CREATE TABLE user_energy (
