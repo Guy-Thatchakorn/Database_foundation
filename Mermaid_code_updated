@@ -8,6 +8,10 @@ erDiagram
         timestamp signup_date
         int xp
         int streak
+        int current_energy
+        int max_energy
+        boolean unlimited_energy
+        timestamp last_energy_filled
     }
 
     LANGUAGES {
@@ -79,6 +83,23 @@ erDiagram
         int rank
     }
 
+    USER_COURSES {
+        int user_course_id PK
+        int user_id FK
+        int course_id FK
+        varchar enrollment_status
+        timestamp enrolled_at
+        timestamp last_accessed_at
+    }
+
+    REFILL_ENERGY {
+        int refill_id PK
+        int user_id FK
+        varchar refill_type
+        int amount
+        timestamp refilled_at
+    }
+
     USERS ||--o{ USER_PROGRESS : tracks
     SKILLS ||--o{ USER_PROGRESS : contains
     LANGUAGES ||--o{ COURSES : includes
@@ -89,3 +110,7 @@ erDiagram
     ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : includes
     USERS ||--|| USER_HEARTS : has
     USERS ||--o{ LEADERBOARD : ranks
+    USERS ||--o{ USER_COURSES : enrolls
+    COURSES ||--o{ USER_COURSES : enrolled_in
+    USERS ||--o{ REFILL_ENERGY : refills
+
