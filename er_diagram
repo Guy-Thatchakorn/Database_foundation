@@ -91,6 +91,5 @@ erDiagram
     LESSONS ||--o{ EXERCISES : has
     USERS ||--o{ USER_ACHIEVEMENTS : earns
     ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : includes
-    USERS ||--o{ LEADERBOARD : ranks
     USERS ||--o{ USER_COURSES : enrolls
     COURSES ||--o{ USER_COURSES : enrolled_in
