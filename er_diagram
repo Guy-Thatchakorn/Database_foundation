@@ -8,6 +8,10 @@ erDiagram
         timestamp signup_date
         int xp
         int streak
+    }
+
+    USER_ENERGY {
+        int user_id PK, FK
         int current_energy
         int max_energy
         boolean unlimited_energy
@@ -69,20 +73,6 @@ erDiagram
         timestamp unlocked_at
     }
 
-    USER_HEARTS {
-        int user_id PK, FK
-        int hearts_remaining
-        timestamp last_updated
-    }
-
-    LEADERBOARD {
-        int leaderboard_id PK
-        int user_id FK
-        date week_start
-        int xp
-        int rank
-    }
-
     USER_COURSES {
         int user_course_id PK
         int user_id FK
@@ -92,14 +82,7 @@ erDiagram
         timestamp last_accessed_at
     }
 
-    REFILL_ENERGY {
-        int refill_id PK
-        int user_id FK
-        varchar refill_type
-        int amount
-        timestamp refilled_at
-    }
-
+    USERS ||--|| USER_ENERGY : manages
     USERS ||--o{ USER_PROGRESS : tracks
     SKILLS ||--o{ USER_PROGRESS : contains
     LANGUAGES ||--o{ COURSES : includes
@@ -108,9 +91,6 @@ erDiagram
     LESSONS ||--o{ EXERCISES : has
     USERS ||--o{ USER_ACHIEVEMENTS : earns
     ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : includes
-    USERS ||--|| USER_HEARTS : has
     USERS ||--o{ LEADERBOARD : ranks
     USERS ||--o{ USER_COURSES : enrolls
     COURSES ||--o{ USER_COURSES : enrolled_in
-    USERS ||--o{ REFILL_ENERGY : refills
-
