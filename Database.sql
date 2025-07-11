@@ -42,7 +42,9 @@ CREATE TABLE exercises (
     lesson_id INTEGER REFERENCES lessons(lesson_id),
     question TEXT NOT NULL,
     correct_answer TEXT NOT NULL,
-    exercise_type VARCHAR(50) CHECK (exercise_type IN ('multiple-choice', 'translation', 'matching', 'listening', 'speaking'))
+    exercise_type VARCHAR(50) CHECK (exercise_type IN ('multiple-choice', 'translation', 'matching', 'listening', 'speaking')),
+    order_in_lesson INTEGER NOT NULL,
+    UNIQUE (lesson_id, order_in_lesson)
 );
 
 -- USER PROGRESS

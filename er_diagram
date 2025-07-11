@@ -2,94 +2,104 @@ erDiagram
 
     USERS {
         int user_id PK
-        varchar username
-        varchar email
-        text password_hash
-        timestamp signup_date
+        string first_name
+        string last_name
+        string username
+        string email
+        string password_hash
+        string preferred_language
         int xp
         int streak
+        datetime created_at
     }
 
     USER_ENERGY {
         int user_id PK, FK
-        int current_energy
-        int max_energy
-        boolean unlimited_energy
-        timestamp last_energy_filled
+        int energy_remaining
+        datetime last_recharged_at
     }
 
     LANGUAGES {
         int language_id PK
-        varchar name
-        varchar code
+        string name
     }
 
     COURSES {
         int course_id PK
-        int from_language_id FK
-        int to_language_id FK
-        varchar title
-    }
-
-    SKILLS {
-        int skill_id PK
-        int course_id FK
-        varchar name
-        int level_count
-        int skill_order
+        int language_id FK
+        string title
+        string description
     }
 
     LESSONS {
         int lesson_id PK
-        int skill_id FK
-        varchar title
+        int course_id FK
+        string name
+        int order_in_course
     }
 
     EXERCISES {
         int exercise_id PK
         int lesson_id FK
-        varchar type
-        text question
-        text answer
+        string exercise_type
+        string question
+        string correct_answer
+        int order_in_lesson
     }
 
     USER_PROGRESS {
-        int user_id PK, FK
-        int skill_id PK, FK
-        int level
-        int strength
-        timestamp last_practiced
+        int progress_id PK
+        int user_id FK
+        int lesson_id FK
+        int xp_earned
+        datetime completed_at
     }
 
     ACHIEVEMENTS {
         int achievement_id PK
-        varchar name
-        text description
+        string name
+        string description
     }
 
     USER_ACHIEVEMENTS {
         int user_id PK, FK
         int achievement_id PK, FK
-        timestamp unlocked_at
+        datetime achieved_at
+    }
+
+    SHOP_ITEMS {
+        int item_id PK
+        string name
+        int cost
+        string description
+    }
+
+    USER_PURCHASES {
+        int purchase_id PK
+        int user_id FK
+        int item_id FK
+        datetime purchased_at
     }
 
     USER_COURSES {
         int user_course_id PK
         int user_id FK
         int course_id FK
-        varchar enrollment_status
-        timestamp enrolled_at
-        timestamp last_accessed_at
+        string enrollment_status
+        datetime enrolled_at
+        datetime last_accessed_at
     }
 
-    USERS ||--|| USER_ENERGY : manages
-    USERS ||--o{ USER_PROGRESS : tracks
-    SKILLS ||--o{ USER_PROGRESS : contains
-    LANGUAGES ||--o{ COURSES : includes
-    COURSES ||--o{ SKILLS : has
-    SKILLS ||--o{ LESSONS : has
-    LESSONS ||--o{ EXERCISES : has
+    %% Relationships
+    USERS ||--|| USER_ENERGY : has
+    USERS ||--o{ USER_PROGRESS : progresses
+    LESSONS ||--o{ USER_PROGRESS : contains
     USERS ||--o{ USER_ACHIEVEMENTS : earns
     ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : includes
+    USERS ||--o{ USER_PURCHASES : buys
+    SHOP_ITEMS ||--o{ USER_PURCHASES : includes
+    LANGUAGES ||--o{ COURSES : offers
+    COURSES ||--o{ LESSONS : includes
+    LESSONS ||--o{ EXERCISES : contains
     USERS ||--o{ USER_COURSES : enrolls
-    COURSES ||--o{ USER_COURSES : enrolled_in
+    COURSES ||--o{ USER_COURSES : has
