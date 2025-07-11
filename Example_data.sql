@@ -8,10 +8,9 @@ INSERT INTO languages (name) VALUES
 ('German'),
 ('Japanese'),
 ('Thai')
-ON CONFLICT (name) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (name) DO NOTHING;
 
 -- 👤 USERS
--- Added first_name and last_name
 INSERT INTO users (first_name, last_name, username, email, password_hash, preferred_language, xp, streak) VALUES
 ('Alice', 'Smith', 'alice', 'alice@example.com', 'hash1', 'Spanish', 300, 5),
 ('Bob', 'Johnson', 'bob', 'bob@example.com', 'hash2', 'French', 120, 2),
@@ -23,7 +22,7 @@ INSERT INTO users (first_name, last_name, username, email, password_hash, prefer
 ('Hannah', 'King', 'hannah', 'hannah@example.com', 'hash8', 'German', 200, 4),
 ('Irene', 'Lee', 'irene', 'irene@example.com', 'hash9', 'French', 320, 5),
 ('Jack', 'Chen', 'jack', 'jack@example.com', 'hash10', 'Thai', 420, 6)
-ON CONFLICT (username) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (username) DO NOTHING;
 
 -- 📚 COURSES
 INSERT INTO courses (language_id, title, description) VALUES
@@ -32,7 +31,7 @@ INSERT INTO courses (language_id, title, description) VALUES
 ((SELECT language_id FROM languages WHERE name = 'German'), 'German Basics', 'Kickstart your German journey.'),
 ((SELECT language_id FROM languages WHERE name = 'Japanese'), 'Japanese Hiragana', 'Master Hiragana characters and simple words.'),
 ((SELECT language_id FROM languages WHERE name = 'Thai'), 'Thai for Beginners', 'Start speaking Thai with core vocabulary.')
-ON CONFLICT (title) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (title) DO NOTHING;
 
 -- 📘 LESSONS
 INSERT INTO lessons (course_id, name, order_in_course) VALUES
@@ -46,22 +45,23 @@ INSERT INTO lessons (course_id, name, order_in_course) VALUES
 ((SELECT course_id FROM courses WHERE title = 'Japanese Hiragana'), 'Hiragana B', 2),
 ((SELECT course_id FROM courses WHERE title = 'Thai for Beginners'), 'Common Phrases', 1),
 ((SELECT course_id FROM courses WHERE title = 'Thai for Beginners'), 'Numbers', 2)
-ON CONFLICT (course_id, name) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (course_id, name) DO NOTHING;
 
--- ✍️ EXERCISES
-INSERT INTO exercises (lesson_id, question, correct_answer, exercise_type) VALUES
-((SELECT lesson_id FROM lessons WHERE name = 'Greetings' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "Hello"', 'Hola', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Greetings' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "Goodbye"', 'Adiós', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Food' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Match "apple" with...', 'manzana', 'matching'),
-((SELECT lesson_id FROM lessons WHERE name = 'Food' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "I eat rice"', 'Yo como arroz', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Travel' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "I want to travel"', 'Quiero viajar', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Basics 1' AND course_id = (SELECT course_id FROM courses WHERE title = 'French Basics')), 'Choose correct translation: "Bonjour"', 'Hello', 'multiple-choice'),
-((SELECT lesson_id FROM lessons WHERE name = 'Basics 2' AND course_id = (SELECT course_id FROM courses WHERE title = 'French Basics')), 'Listen and type: "Merci"', 'Merci', 'listening'),
-((SELECT lesson_id FROM lessons WHERE name = 'Intro A' AND course_id = (SELECT course_id FROM courses WHERE title = 'German Basics')), 'Translate "Ich bin müde"', 'I am tired', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Hiragana A' AND course_id = (SELECT course_id FROM courses WHERE title = 'Japanese Hiragana')), 'What is "あ"', 'a', 'multiple-choice'),
-((SELECT lesson_id FROM lessons WHERE name = 'Hiragana B' AND course_id = (SELECT course_id FROM courses WHERE title = 'Japanese Hiragana')), 'Match: お → o', 'o', 'matching'),
-((SELECT lesson_id FROM lessons WHERE name = 'Common Phrases' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 'Translate "Hello"', 'สวัสดี', 'translation'),
-((SELECT lesson_id FROM lessons WHERE name = 'Numbers' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 'Translate "Three"', 'สาม', 'translation');
+-- ✍️ EXERCISES (UPDATED to include order_in_lesson)
+INSERT INTO exercises (lesson_id, question, correct_answer, exercise_type, order_in_lesson) VALUES
+((SELECT lesson_id FROM lessons WHERE name = 'Greetings' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "Hello"', 'Hola', 'translation', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Greetings' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "Goodbye"', 'Adiós', 'translation', 2),
+((SELECT lesson_id FROM lessons WHERE name = 'Food' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Match "apple" with...', 'manzana', 'matching', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Food' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "I eat rice"', 'Yo como arroz', 'translation', 2),
+((SELECT lesson_id FROM lessons WHERE name = 'Travel' AND course_id = (SELECT course_id FROM courses WHERE title = 'Spanish Basics')), 'Translate "I want to travel"', 'Quiero viajar', 'translation', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Basics 1' AND course_id = (SELECT course_id FROM courses WHERE title = 'French Basics')), 'Choose correct translation: "Bonjour"', 'Hello', 'multiple-choice', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Basics 2' AND course_id = (SELECT course_id FROM courses WHERE title = 'French Basics')), 'Listen and type: "Merci"', 'Merci', 'listening', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Intro A' AND course_id = (SELECT course_id FROM courses WHERE title = 'German Basics')), 'Translate "Ich bin müde"', 'I am tired', 'translation', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Hiragana A' AND course_id = (SELECT course_id FROM courses WHERE title = 'Japanese Hiragana')), 'What is "あ"', 'a', 'multiple-choice', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Hiragana B' AND course_id = (SELECT course_id FROM courses WHERE title = 'Japanese Hiragana')), 'Match: お → o', 'o', 'matching', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Common Phrases' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 'Translate "Hello"', 'สวัสดี', 'translation', 1),
+((SELECT lesson_id FROM lessons WHERE name = 'Numbers' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 'Translate "Three"', 'สาม', 'translation', 1)
+ON CONFLICT (lesson_id, order_in_lesson) DO NOTHING; -- Added ON CONFLICT for safety and uniqueness
 
 -- 📚 USER COURSES
 -- Enroll users in some initial courses
@@ -75,7 +75,8 @@ INSERT INTO user_courses (user_id, course_id, enrollment_status) VALUES
 ((SELECT user_id FROM users WHERE username = 'george'), (SELECT course_id FROM courses WHERE title = 'French Basics'), 'enrolled'),
 ((SELECT user_id FROM users WHERE username = 'hannah'), (SELECT course_id FROM courses WHERE title = 'German Basics'), 'enrolled'),
 ((SELECT user_id FROM users WHERE username = 'irene'), (SELECT course_id FROM courses WHERE title = 'French Basics'), 'enrolled'),
-((SELECT user_id FROM users WHERE username = 'jack'), (SELECT course_id FROM courses WHERE title = 'Thai for Beginners'), 'enrolled');
+((SELECT user_id FROM users WHERE username = 'jack'), (SELECT course_id FROM courses WHERE title = 'Thai for Beginners'), 'enrolled')
+ON CONFLICT (user_id, course_id) DO NOTHING;
 
 -- 📈 USER PROGRESS
 INSERT INTO user_progress (user_id, lesson_id, xp_earned, completed_at) VALUES
@@ -88,8 +89,8 @@ INSERT INTO user_progress (user_id, lesson_id, xp_earned, completed_at) VALUES
 ((SELECT user_id FROM users WHERE username = 'felix'), (SELECT lesson_id FROM lessons WHERE name = 'Hiragana B' AND course_id = (SELECT course_id FROM courses WHERE title = 'Japanese Hiragana')), 10, CURRENT_DATE - INTERVAL '1 day'), -- Felix did a Japanese lesson
 ((SELECT user_id FROM users WHERE username = 'george'), (SELECT lesson_id FROM lessons WHERE name = 'Basics 2' AND course_id = (SELECT course_id FROM courses WHERE title = 'French Basics')), 35, CURRENT_DATE - INTERVAL '4 days'),
 ((SELECT user_id FROM users WHERE username = 'hannah'), (SELECT lesson_id FROM lessons WHERE name = 'Common Phrases' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 25, CURRENT_DATE - INTERVAL '1 day'),
-((SELECT user_id FROM users WHERE username = 'irene'), (SELECT lesson_id FROM lessons WHERE name = 'Numbers' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 30, CURRENT_DATE - INTERVAL '2 days');
-
+((SELECT user_id FROM users WHERE username = 'irene'), (SELECT lesson_id FROM lessons WHERE name = 'Numbers' AND course_id = (SELECT course_id FROM courses WHERE title = 'Thai for Beginners')), 30, CURRENT_DATE - INTERVAL '2 days')
+ON CONFLICT (user_id, lesson_id) DO NOTHING;
 -- 🏆 ACHIEVEMENTS
 INSERT INTO achievements (name, description) VALUES
 ('First Lesson', 'Completed your first lesson!'),
@@ -97,7 +98,7 @@ INSERT INTO achievements (name, description) VALUES
 ('3-Day Streak', 'Practiced for 3 days in a row.'),
 ('Fluent Start', 'Completed your first course.'),
 ('Shopper', 'Made your first shop purchase.')
-ON CONFLICT (name) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (name) DO NOTHING;
 
 -- 🏅 USER ACHIEVEMENTS
 INSERT INTO user_achievements (user_id, achievement_id) VALUES
@@ -111,7 +112,7 @@ INSERT INTO user_achievements (user_id, achievement_id) VALUES
 ((SELECT user_id FROM users WHERE username = 'felix'), (SELECT achievement_id FROM achievements WHERE name = 'First Lesson')),
 ((SELECT user_id FROM users WHERE username = 'george'), (SELECT achievement_id FROM achievements WHERE name = 'First Lesson')),
 ((SELECT user_id FROM users WHERE username = 'hannah'), (SELECT achievement_id FROM achievements WHERE name = 'Fluent Start'))
-ON CONFLICT (user_id, achievement_id) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (user_id, achievement_id) DO NOTHING;
 
 -- 🛍️ SHOP ITEMS
 INSERT INTO shop_items (name, cost, description) VALUES
@@ -120,7 +121,7 @@ INSERT INTO shop_items (name, cost, description) VALUES
 ('Heart Refill', 30, 'Refill all your hearts.'),
 ('Bonus Skill: Idioms', 200, 'Unlock fun idioms lesson.'),
 ('Theme: Dark Mode', 150, 'Dark mode for your UI.')
-ON CONFLICT (name) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (name) DO NOTHING;
 
 -- 💸 USER PURCHASES
 INSERT INTO user_purchases (user_id, item_id) VALUES
@@ -149,4 +150,4 @@ INSERT INTO user_energy (user_id, energy_remaining, last_recharged_at) VALUES
 ((SELECT user_id FROM users WHERE username = 'hannah'), 2, CURRENT_TIMESTAMP - INTERVAL '90 minutes'),
 ((SELECT user_id FROM users WHERE username = 'irene'), 5, CURRENT_TIMESTAMP - INTERVAL '5 minutes'),
 ((SELECT user_id FROM users WHERE username = 'jack'), 0, CURRENT_TIMESTAMP - INTERVAL '6 hours')
-ON CONFLICT (user_id) DO NOTHING; -- Added ON CONFLICT for safety
+ON CONFLICT (user_id) DO NOTHING;
